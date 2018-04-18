@@ -63,8 +63,8 @@ where more than var stallTime has elapsed, assume a stall and calls the callMe f
                     callMe("stall");
                 }
             }
-// if the call to the factomd api fails, callMe is triggered
         }
+// if the call to the factomd api fails, the catch block triggers the callMe() function
         catch(e) {
             if (lastBlock.timeStamp == 0) {
                 console.log("Start the node before running this script");
