@@ -7,7 +7,7 @@ This scirpt monitors the state of your remote Factom node. In the event that fac
 Install node.js and npm if you do not already have them:
 
 ```
-Sudo apt install npm
+sudo apt install npm
 ```
 
 Install the Factom NPM library
