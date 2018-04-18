@@ -46,7 +46,7 @@ const cli = new FactomCli({
 
 ## Running
 
-Now, make sure your factomd instance is running. Open your command line prompt and navigate to the enclosing folder. Then to run, type:
+Make sure your factomd instance is running. Open your command line prompt and navigate to the enclosing folder. To run, type:
 
 ```
 node monitor.js
