@@ -16,7 +16,7 @@ const cli = new FactomCli({
 // length of time (ms) after which blockchain is assumed to have stalled
 let retryCount = 0,
     interval = 15000,
-    stallTime = 120000;
+    stallTime = 1200000;
 
 // object to store blockchain state and time first seen by this script
 let lastBlock = {
