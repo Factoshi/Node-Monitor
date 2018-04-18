@@ -54,7 +54,7 @@ node monitor.js
 
 ## Built With
 
-* [Factom Node library designed by @PaulBernier](http://www.dropwizard.io/1.0.2/docs/)
+* [Factom Node library](https://www.npmjs.com/package/factom) designed by @PaulBernier
 * [Twilio](https://www.twilio.com/) - Telephone calling utility
 
 ## Authors
