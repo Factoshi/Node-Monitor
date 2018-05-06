@@ -1,5 +1,5 @@
 {
-  "name": "node-monitor",
+  "name": "monitor",
   "version": "0.1.1",
   "description": "Application to monitor the status of a remote factomd instance, with built in phonecall alert in the event of factomd failure.",
   "main": "monitor.js",
@@ -28,5 +28,6 @@
     "factom": "^0.1.2",
     "inquirer": "^5.2.0",
     "twilio": "^3.16.0"
-  }
+  },
+  "devDependencies": {}
 }
