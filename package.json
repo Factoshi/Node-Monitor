@@ -1,0 +1,31 @@
+{
+  "name": "node-monitor",
+  "version": "0.1.1",
+  "description": "Application to monitor the status of a remote factomd instance, with built in phonecall alert in the event of factomd failure.",
+  "main": "monitor.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Factoshi/Node-Monitor.git"
+  },
+  "keywords": [
+    "Factom",
+    "factomd",
+    "monitor",
+    "alert",
+    "Twilio"
+  ],
+  "author": "Alex Carrithers",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Factoshi/Node-Monitor/issues"
+  },
+  "homepage": "https://github.com/Factoshi/Node-Monitor#readme",
+  "dependencies": {
+    "config": "^1.30.0",
+    "factom": "^0.1.2",
+    "twilio": "^3.16.0"
+  }
+}
