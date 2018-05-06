@@ -1,14 +1,16 @@
+const config = require('./config')
+
 // twilio library and account login details
-const accountSid = 'XXXX';
-const authToken = 'XXXX';
+const accountSid = config.SID;
+const authToken = config.token;
 const Twilio = require('twilio');
 const client = new Twilio(accountSid, authToken);
 
 // factom library and host details, empty object defaults to local host
 const { FactomCli } = require('factom');
 const cli = new FactomCli({
-    host: 'XXXX',
-    port: 8088
+    host: config.host,
+    port: config.port
 });
 
 // the number of retries made since node failure
@@ -24,16 +26,20 @@ let lastBlock = {
     timeStamp: 0,
 };
 
+console.log(`Starting script...`)
+
 /* this function takes the details given from twilio and will make a telephone call
 to the given operator */
 
 function callMe(fault) {
     client.api.calls
         .create({
-            url: 'http://demo.twilio.com/docs/voice.xml',
-            to: '+XXXX',
-            from: '+XXXX',
-        });
+            url: config.voiceUrl,
+            to: config.to,
+            from: config.from
+        })
+        .then(call => console.log(call.sid))
+        .done();
     console.log("Alerting contact via voice call");
     nodeOffline(fault);
 }
