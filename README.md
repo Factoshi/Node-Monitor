@@ -10,47 +10,28 @@ Install node.js and npm if you do not already have them:
 sudo apt install npm
 ```
 
-Install the Factom NPM library
+Navigate to the node-monitor folder then install the script:
 
 ```
-npm install --save factom
-```
-
-Install Twilio
-
-```
-npm install --save twilio
-```
-
-Clone Factom Node Monitor, then open monitor.js in a text editor. Get your Twilio login details from the Twilio website and put them in the following place:
-
-```
-const accountSid = 'XXXXX';
-const authToken = 'XXXXX';
-```
-Next fill in your telephone information. Use the number provided by Twilio in the 'from' field, and your target phone number in the 'to' field:
-
-```
-url: 'http://demo.twilio.com/docs/voice.xml',
-to: '+XXXX',
-from: '+XXXX',
-```
-
-Finally, fill in your node information. Leave the host and port fields blank demoing the script on a local host with factomd on port 8088. Otherwise, fill in the IP address of your remote host and the port to call factomd on (default 8088):
-
-```
-const cli = new FactomCli({
-    host: 'HOST_IP_HERE',
-    port: 8088
+npm install -g
 ```
 
 ## Running
 
-Make sure your factomd instance is running. Open your command line prompt and navigate to the enclosing folder. To run, type:
+First you need to set your configuration using the following command:
+
+```
+node set-config.js
+```
+
+Once you have done that, your configurations will be saved to config.json. If you need to change your configurations, you can either alter that JSON directly or you can run the config script again. Note that if you decide to run the script again, it will write over everything, so make sure you enter all your configurations.
+
+Make sure your factomd instance is running. Then type:
 
 ```
 node monitor.js
 ```
+Monitor.js will keep running, regardless of whether your node crashes or the blockchain stalls. Once your node returns to a healthy state, monitor.js will recognise that healthy state and will be ready to trigger a call again if factomd falls out of that state. There is no need to restart it.
 
 ## Built With
 
