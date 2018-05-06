@@ -26,6 +26,7 @@
   "dependencies": {
     "config": "^1.30.0",
     "factom": "^0.1.2",
+    "inquirer": "^5.2.0",
     "twilio": "^3.16.0"
   }
 }
