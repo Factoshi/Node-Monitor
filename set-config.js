@@ -3,45 +3,55 @@ const fs = require('fs')
 const inquirer = require('inquirer')
 
 var questions = [
-  {
-    type: 'input',
-    name: 'SID',
-    message: 'What is your Twilio account SID?'
+    {
+        type: 'input',
+        name: 'SID',
+        message: 'What is your Twilio account SID?'
     },
-  {
-    type: 'input',
-    name: 'token',
-    message: 'What is your Twilio auth token?'
+    {
+        type: 'input',
+        name: 'token',
+        message: 'What is your Twilio auth token?'
     },
-  {
-    type: 'input',
-    name: 'from',
-    message: 'What phone number does your alert call come from?'
+    {
+        type: 'input',
+        name: 'from',
+        message: 'What phone number does your alert call come from?'
     },
-  {
-    type: 'input',
-    name: 'to',
-    message: 'What phone number do you receive your alert call to?'
+    {
+        type: 'input',
+        name: 'to',
+        message: 'What phone number do you receive your alert call to?'
     },
-  {
-    type: 'input',
-    name: 'voiceUrl',
-    message: 'What is your Twilio voice URL?'
+    {
+        type: 'input',
+        name: 'voiceUrl',
+        message: 'What is your Twilio voice URL?'
     },
-  {
-    type: 'input',
-    name: 'textUrl',
-    message: 'What is your Twilio text URL?'
+    {
+        type: 'input',
+        name: 'textUrl',
+        message: 'What is your Twilio text URL?'
     },
-  {
-    type: 'input',
-    name: 'host',
-    message: 'What is the IP address of the host you are monitoring?'
+    {
+        type: 'input',
+        name: 'host1',
+        message: 'What is the IP address of the first host you are monitoring?'
     },
-  {
-    type: 'input',
-    name: 'port',
-    message: 'Which port is factomd using on that host?'
+    {
+        type: 'input',
+        name: 'port1',
+        message: 'Which port is factomd using on that host?'
+    },
+    {
+        type: 'input',
+        name: 'host2',
+        message: 'What is the IP address of the second host you are monitoring (leave blank if none)'
+    },
+    {
+        type: 'input',
+        name: 'port2',
+        message: 'Which port is factomd using on that host?'
     }
 ]
 
