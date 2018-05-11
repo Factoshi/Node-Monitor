@@ -35,22 +35,12 @@ var questions = [
     },
     {
         type: 'input',
-        name: 'host1',
-        message: 'What is the IP address of the first host you are monitoring?'
+        name: 'host',
+        message: 'What is the IP address of the host you are monitoring?'
     },
     {
         type: 'input',
-        name: 'port1',
-        message: 'Which port is factomd using on that host?'
-    },
-    {
-        type: 'input',
-        name: 'host2',
-        message: 'What is the IP address of the second host you are monitoring (leave blank if none)'
-    },
-    {
-        type: 'input',
-        name: 'port2',
+        name: 'port',
         message: 'Which port is factomd using on that host?'
     }
 ]
