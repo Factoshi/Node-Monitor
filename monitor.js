@@ -26,7 +26,7 @@ let lastBlock = {
     timeStamp: 0,
 };
 
-console.log(`Starting script...`)
+console.log(`Started monitoring host ${config.host}`)
 
 /* this function takes the details given from twilio and will make a telephone call
 to the given operator */
