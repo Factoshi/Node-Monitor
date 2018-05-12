@@ -62,7 +62,9 @@ where more than var stallTime has elapsed, assume a stall and calls the callMe f
             else if (db.directoryblockheight == lastBlock.blockHeight) {
                 let elapsedTime = Date.now() - lastBlock.timeStamp,
                     humanTime = millisToMinutesAndSeconds(elapsedTime);
-                console.log("Block", lastBlock.blockHeight, "first seen", humanTime, "minutes ago");
+                if (elapsedTime > 900000) {
+                    console.log("Block", lastBlock.blockHeight, "first seen", humanTime, "minutes ago");
+                }
                 if (elapsedTime > stallTime) {
                     console.log("Blockchain has stalled...");
                     clearInterval(testInterval);
