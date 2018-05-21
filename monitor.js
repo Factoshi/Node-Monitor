@@ -125,8 +125,7 @@ comes back online, break the loop and jump back to the testNodeStatus() function
                 let db = await axios.get(`http://${config.host}/factomdBatch?batch=myHeight`);
                 console.log("Node online. Total time offline:", getTimeSinceFault(), "minutes");
                 clearInterval(hangingInterval);
-                db.data[0].Height > lastBlock.blockHeight ? testNodeStatus() : nodeOffline("stall"),
-                console.log("Monitor.js will report node as stalled until blockchain progresses following boot");
+                testNodeStatus();
             }
             catch(e) {
                 console.log("Node offline for", getTimeSinceFault(), "minutes");
