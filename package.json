@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/Factoshi/Node-Monitor#readme",
   "dependencies": {
-    "factom": "^0.1.2",
+    "axios": "^0.18.0",
     "inquirer": "^5.2.0",
     "twilio": "^3.16.0"
   },

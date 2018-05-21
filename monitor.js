@@ -1,3 +1,5 @@
+const axios = require('axios')
+
 const config = require('./config')
 
 // twilio library and account login details
@@ -5,13 +7,6 @@ const accountSid = config.SID;
 const authToken = config.token;
 const Twilio = require('twilio');
 const client = new Twilio(accountSid, authToken);
-
-// factom library and host details, empty object defaults to local host
-const { FactomCli } = require('factom');
-const cli = new FactomCli({
-    host: config.host,
-    port: config.port
-});
 
 // the number of retries made since node failure
 // length of time (ms) between each attempt to call the node
@@ -26,7 +21,7 @@ let lastBlock = {
     timeStamp: 0,
 };
 
-console.log(`Started monitoring host ${config.host}`)
+console.log(`Started monitoring host: ${config.host}`)
 
 /* this function takes the details given from twilio and will make a telephone call
 to the given operator */
@@ -49,17 +44,18 @@ function testNodeStatus() {
 // setInterval calls the 'heights' method on the factomd remote host. time taken from interval var
     let testInterval = setInterval( async() => {
         try {
-            let db = await cli.factomdApi('heights');
+            let db = await axios.get(`http://${config.host}/factomdBatch?batch=myHeight`);
+            debugger
 /* check to see if the most recent factomd api call found a new directory block height
 if a new directly block height is found, update the lastBlock object */
-            if (db.directoryblockheight > lastBlock.blockHeight) {
-                lastBlock.blockHeight = db.directoryblockheight;
+            if (db.data[0].Height > lastBlock.blockHeight) {
+                lastBlock.blockHeight = db.data[0].Height;
                 lastBlock.timeStamp = Date.now();
                 console.log("New block height found:", lastBlock.blockHeight);
             }
 /* if no new directory block height is found, check the length of time since the last block.
 where more than var stallTime has elapsed, assume a stall and calls the callMe function */
-            else if (db.directoryblockheight == lastBlock.blockHeight) {
+            else if (db.data[0].Height === lastBlock.blockHeight) {
                 let elapsedTime = Date.now() - lastBlock.timeStamp,
                     humanTime = millisToMinutesAndSeconds(elapsedTime);
                 if (elapsedTime > 900000) {
@@ -126,10 +122,10 @@ comes back online, break the loop and jump back to the testNodeStatus() function
     if (fault == "hang") {
         let hangingInterval = setInterval( async() => {
             try {
-                let db = await cli.factomdApi('heights');
+                let db = await axios.get(`http://${config.host}/factomdBatch?batch=myHeight`);
                 console.log("Node online. Total time offline:", getTimeSinceFault(), "minutes");
                 clearInterval(hangingInterval);
-                db.directoryblockheight > lastBlock.blockHeight ? testNodeStatus() : nodeOffline("stall"),
+                db.data[0].Height > lastBlock.blockHeight ? testNodeStatus() : nodeOffline("stall"),
                 console.log("Monitor.js will report node as stalled until blockchain progresses following boot");
             }
             catch(e) {
@@ -142,8 +138,8 @@ that happens, break the loop and jump back to the testNodeStatus() function */
     else if (fault == "stall") {
         let stallInterval = setInterval( async() => {
             try {
-                let db = await cli.factomdApi('heights');
-                if (db.directoryblockheight > lastBlock.blockHeight) {
+                let db = axios.get(`http://${config.host}/factomdBatch?batch=myHeight`);
+                if (db.data[0].Height > lastBlock.blockHeight) {
                     console.log("Blockchain live again. Total time stalled:", getTimeSinceFault(), "minutes");
                     clearInterval(stallInterval);
                     testNodeStatus();

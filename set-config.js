@@ -36,12 +36,8 @@ var questions = [
     {
         type: 'input',
         name: 'host',
-        message: 'What is the IP address of the host you are monitoring?'
-    },
-    {
-        type: 'input',
-        name: 'port',
-        message: 'Which port is factomd using on that host?'
+        message: 'What is the IP address of the host you are monitoring?',
+        default: 'localhost:8090'
     }
 ]
 
