@@ -58,7 +58,7 @@ where more than var stallTime has elapsed, assume a stall and calls the callMe f
             else if (db.data[0].Height === lastBlock.blockHeight) {
                 let elapsedTime = Date.now() - lastBlock.timeStamp,
                     humanTime = millisToMinutesAndSeconds(elapsedTime);
-                if (elapsedTime > 900000) {
+                if (elapsedTime > 1500000) { // if 25 minutes since last block
                     console.log("Block", lastBlock.blockHeight, "first seen", humanTime, "minutes ago");
                 }
                 if (elapsedTime > stallTime) {
@@ -138,7 +138,7 @@ that happens, break the loop and jump back to the testNodeStatus() function */
     else if (fault == "stall") {
         let stallInterval = setInterval( async() => {
             try {
-                let db = axios.get(`http://${config.host}/factomdBatch?batch=myHeight`);
+                let db = await axios.get(`http://${config.host}/factomdBatch?batch=myHeight`);
                 if (db.data[0].Height > lastBlock.blockHeight) {
                     console.log("Blockchain live again. Total time stalled:", getTimeSinceFault(), "minutes");
                     clearInterval(stallInterval);
