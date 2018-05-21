@@ -87,7 +87,7 @@ function retry() {
     setTimeout( async() => {
 // if a try succeeds, retryCount resets to 0 and testInterval continues
         try {
-            let db = await cli.factomdApi('heights');
+            let db = await axios.get(`http://${config.host}/factomdBatch?batch=myHeight`)
             console.log("Connection successful.");
             retryCount = 0;
             testNodeStatus();
