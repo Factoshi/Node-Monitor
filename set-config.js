@@ -30,11 +30,6 @@ var questions = [
     },
     {
         type: 'input',
-        name: 'textUrl',
-        message: 'What is your Twilio text URL?'
-    },
-    {
-        type: 'input',
         name: 'host',
         message: 'What is the IP address of the host you are monitoring?',
         default: 'localhost:8090'
