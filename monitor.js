@@ -12,7 +12,7 @@ const client = new Twilio(accountSid, authToken);
 // length of time (ms) between each attempt to call the node
 // length of time (ms) after which blockchain is assumed to have stalled
 let retryCount = 0,
-    interval = 15000,
+    interval = 60000,
     stallTime = 1200000;
 
 // object to store blockchain state and time first seen by this script
@@ -131,7 +131,7 @@ comes back online, break the loop and jump back to the testNodeStatus() function
             catch(e) {
                 console.log("Node offline for", getTimeSinceFault(), "minutes");
             }
-        }, 60000);
+        }, interval);
     }
 /* if the node has stalled, wait for the block height to begin increasing again. When
 that happens, break the loop and jump back to the testNodeStatus() function */
@@ -154,7 +154,7 @@ that happens, break the loop and jump back to the testNodeStatus() function */
                 console.log("Failed to contact stalled node...");
                 nodeOffline("hang");
             }
-        }, 60000);
+        }, interval);
     }
 }
 
