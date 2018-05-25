@@ -13,7 +13,7 @@ const client = new Twilio(accountSid, authToken);
 // length of time (ms) after which blockchain is assumed to have stalled
 let retryCount = 0,
     interval = 60000,
-    stallTime = 1200000;
+    stallTime = 1500000;
 
 // object to store blockchain state and time first seen by this script
 let lastBlock = {
@@ -58,9 +58,6 @@ where more than var stallTime has elapsed, assume a stall and calls the callMe f
             else if (db.data[0].Height === lastBlock.blockHeight) {
                 let elapsedTime = Date.now() - lastBlock.timeStamp,
                     humanTime = millisToMinutesAndSeconds(elapsedTime);
-                if (elapsedTime > 1500000) { // if 25 minutes since last block
-                    console.log("Block", lastBlock.blockHeight, "first seen", humanTime, "minutes ago");
-                }
                 if (elapsedTime > stallTime) {
                     console.log("Blockchain has stalled...");
                     clearInterval(testInterval);
