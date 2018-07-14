@@ -19,7 +19,6 @@ function Node(node) {
 }
 
 Node.prototype.alertUser = async function() {
-    console.log(this);
     if (this.voice === 'true') {
         client.api.calls
             .create({
