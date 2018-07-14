@@ -28,5 +28,7 @@
     "twilio": "^3.17.6",
     "yaml-js": "^0.2.3"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "mocha": "^5.2.0"
+  }
 }
