@@ -1,8 +1,8 @@
 const fs = require('fs');
 
 const axios = require('axios');
-const yaml = require('yaml-js');
 
+const yaml = require('yaml-js');
 const config = yaml.load(fs.readFileSync('./config.yaml'));
 
 const Twilio = require('twilio');
@@ -55,23 +55,15 @@ Node.prototype.checkHeight = async function() {
 Node.prototype.monitor = async function() {
     const nodeHeight = await this.checkHeight();
 
-    if (!nodeHeight && this.status !== 'offline') {
+    if (!nodeHeight && this.status === 'online') {
         this.status = 'offline';
         console.log('\x1b[31m', `${this.name}:`, '\x1b[0m', `node is offline - ${this.height}`);
         this.alertUser();
-
-    } else if (
-        Date.now() - this.lastBlockTime > 1800000
-        && this.status === 'online'
-    ) {
+    } else if (Date.now() - this.lastBlockTime > 1200000 && this.status === 'online') {
         this.status = 'stalled';
         console.log('\x1b[31m', `${this.name}:`, '\x1b[0m', `node has stalled - ${this.height}`);
         this.alertUser();
-
-    } else if (
-        (nodeHeight > this.height)
-        || (nodeHeight && this.status === 'offline')
-    ) {
+    } else if (nodeHeight > this.height || (nodeHeight && this.status === 'offline')) {
         this.height = nodeHeight;
         this.lastBlockTime = Date.now();
         this.status = 'online';
