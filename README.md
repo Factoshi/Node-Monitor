@@ -42,7 +42,9 @@ npm install pm2 -g
 
 ## Running
 
-First, fill out all of the details in config.yaml. It is important that you read the comments in the config file carefully otherwise the script may not work as expected.
+First, copy config.yaml.copy to config.yaml.
+
+Then, fill out all of the details in config.yaml. It is important that you read the comments in the config file carefully otherwise the script may not work as expected.
 
 Second, make sure the firewall for the control panel port is open on each target host.
 
