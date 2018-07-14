@@ -1,6 +1,6 @@
 {
   "name": "monitor",
-  "version": "0.1.1",
+  "version": "0.3.0",
   "description": "Application to monitor the status of a remote factomd instance, with built in phonecall alert in the event of factomd failure.",
   "main": "monitor.js",
   "scripts": {
@@ -25,8 +25,8 @@
   "homepage": "https://github.com/Factoshi/Node-Monitor#readme",
   "dependencies": {
     "axios": "^0.18.0",
-    "inquirer": "^5.2.0",
-    "twilio": "^3.16.0"
+    "twilio": "^3.17.6",
+    "yaml-js": "^0.2.3"
   },
   "devDependencies": {}
 }

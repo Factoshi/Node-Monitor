@@ -1,0 +1,7 @@
+changelog v0.3.0
+
+- Complete rewrite
+- Add support for monitoring multiple nodes
+- Add support for text message alerts
+- Polls node more frequently but also less vulnerable to temp connection outages
+- Change to YAML config file

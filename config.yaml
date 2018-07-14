@@ -1,0 +1,24 @@
+# CONFIGURATION FILE
+# Delete or comment out unneeded nodes. Add more nodes by duplicating fields
+# voiceUrl only mandatory when some node has voice set to true
+# All other fields are mandatory
+
+twilio:
+    SID: 'SID string goes inside these quotation marks'
+    authToken: 'authToken goes in these ones'
+    from: 'from number here'
+    to: 'to number here'
+    voiceUrl: 'your voice URL here'
+
+nodes:
+    -   ip: 'ip address of the node you are monitoring inside these quotes'
+        port: 'the port of the node'
+        name: 'a human friendly name - can be anything'
+        voice: 'write "true" here if you want to be called'
+        text: 'or write "false" if you do not want a text'
+
+    -   ip: 'same drill as above but a second node'
+        port: 'If you do not have a second node'
+        name: 'delete all this'
+        voice: 'If you have more nodes'
+        text: 'then simply copy and paste more templates'

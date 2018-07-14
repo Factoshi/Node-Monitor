@@ -1,42 +1,85 @@
-# Factom Node Monitor and Alert
+# Factom Node Monitoring and Alert Tool
 
-This scirpt monitors the state of your remote Factom node. In the event that factomd hangs or the blockchain stalls, the script uses Twilio to make a telephone call directly to a number of your choice. Note, you must have a Twilio account to use this script.
+This scirpt monitors the state of your local or remote Factomd node. In the event that Factomd hangs or the blockchain stalls, the script uses Twilio to make a telephone call directly to a number of your choice. Note, you must have a Twilio account to use this script.
 
-### Installing on Ubuntu
+## Installing NodeJS
 
-Install node.js and npm if you do not already have them:
+First, install NodeJS on your system.
 
-```
-sudo apt install npm
-```
-
-Navigate to the node-monitor folder then install the script:
+### Ubuntu
 
 ```
-npm install -g
+curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
+sudo apt-get install -y nodejs
 ```
+
+### MacOS
+
+Visit the NodeJS website to download in the installer package: https://nodejs.org/en/#download
+
+Alternatively, if you have Homebrew installed:
+
+```
+brew install node
+```
+
+## Installing the Monitoring Tool
+
+Clone the repo into your target directory. Then, navigate into the project folder and type:
+
+```
+npm install
+```
+
+## Installing PM2 (optional but recommended)
+
+PM2 is a process manager built for NodeJS. It is a convenient and easy way to manage the script. To install, type:
+
+```
+npm install pm2 -g
+```
+(Note: You need to run the above command with root permissions)
 
 ## Running
 
-First you need to set your configuration using the following command:
+First, fill out all of the details in config.yaml. It is important that you read the comments in the config file carefully otherwise the script may not work as expected.
 
-```
-node set-config.js
-```
+Second, make sure the firewall for the control panel port is open on each target host.
 
-Once you have done that, your configurations will be saved to config.json. If you need to change your configurations, you can either alter that JSON directly or you can run the config script again. Note that if you decide to run the script again, it will write over everything, so make sure you enter all your configurations.
 
-Make sure your factomd instance is running. Then type:
+### Without PM2
+
+To run the script without PM2, make sure you're in the project's root directory then run:
 
 ```
 node monitor.js
 ```
-Monitor.js will keep running, regardless of whether your node crashes or the blockchain stalls. Once your node returns to a healthy state, monitor.js will recognise that healthy state and will be ready to trigger a call again if factomd falls out of that state. There is no need to restart it.
+
+### With PM2
+
+With PM2, make sure you are in the project's root directory then run:
+
+```
+pm2 start monitor.js
+```
+
+Next, save the current process list:
+
+```
+pm2 save
+```
+
+Finally, to make sure the script starts on boot, run:
+
+```
+pm2 startup
+```
+
+then follow the onscreen instructions.
 
 ## Built With
 
-* [Factom Node library](https://www.npmjs.com/package/factom) designed by @PaulBernier
-* [Twilio](https://www.twilio.com/) - Telephone calling utility
+* [Twilio](https://www.twilio.com/)
 
 ## Authors
 
