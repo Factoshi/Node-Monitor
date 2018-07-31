@@ -19,7 +19,7 @@ function Node(node) {
 }
 
 Node.prototype.alertUser = async function() {
-    if (this.voice === 'true') {
+    if (this.voice === true) {
         client.api.calls
             .create({
                 url: config.twilio.voiceUrl,
@@ -29,7 +29,7 @@ Node.prototype.alertUser = async function() {
             .done();
     }
 
-    if (this.text === 'true') {
+    if (this.text === true) {
         client.messages
             .create({
                 body: `${this.name} is ${this.status}`,
@@ -43,9 +43,11 @@ Node.prototype.alertUser = async function() {
 Node.prototype.checkHeight = async function() {
     for (let i = 0; i < 10; i++) {
         try {
-            const controlPanelHeight = await axios.get(`http://${this.ip}:${this.port}/factomdBatch?batch=myHeight`);
+            const controlPanelHeight = await axios.get(
+                `http://${this.ip}:${this.port}/factomdBatch?batch=myHeight`
+            );
             return controlPanelHeight.data[0].Height;
-        } catch(err) {
+        } catch (err) {
             await wait(3000);
         }
     }
@@ -72,7 +74,7 @@ Node.prototype.monitor = async function() {
 };
 
 function wait(x) {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
         setTimeout(() => resolve(), x);
     });
 }
