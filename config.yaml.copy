@@ -7,18 +7,48 @@ twilio:
     SID: 'SID string goes inside these quotation marks'
     authToken: 'authToken goes in these ones'
     from: 'from number here'
-    to: 'to number here'
     voiceUrl: 'your voice URL here'
+    alertOffDutyByText: true
+
+# alertOffDutyByText will send everyone not on duty a text if something happens.
+# It will not call an off duty person, even if voice is set to true for the node in question.
+# In all instances, the person will be informed whether or not they are on duty.
 
 nodes:
     -   ip: 'ip address of the node you are monitoring inside these quotes'
         port: 'the port of the node'
         name: 'a human friendly name - can be anything'
-        voice: 'write "true" here if you want to be called'
-        text: 'or write "false" if you do not want a text'
+        voice: true
+        text: true
 
     -   ip: 'same drill as above but a second node'
         port: 'If you do not have a second node'
         name: 'delete all this'
-        voice: 'If you have more nodes'
-        text: 'then simply copy and paste more templates'
+        voice: false
+        text: true
+
+# For the rota below, monitor.js will alert whoever is on call.
+# If there is a gap in the rota where no one is currently on call
+# or if there are two people who are on call at the same time,
+# monitor.js will alert the person with the highest priority
+# (a higher number is a higher priority).
+# Timezone is the same as that on the local machine.
+# The day of the week MUST have an initial capital letter.
+
+rota:
+    -   name: 'Bob'
+        phoneNumber: '447845609873'
+        onDuty:
+            Monday: '00:00 - 08:00'
+            Tuesday: '00:00 - 08:00'
+            Wednesday: '16:00 - 23:59' # <- Make sure you do not select 00:00 as the end of the day
+            Thursday: '12:00 - 20:00'
+            Friday: '12:00 - 20:00'
+        priority: '1'
+
+    -   name: 'Bill'
+        phoneNumber: '447123456738'
+        onDuty:
+            Saturday: '00:00 - 23:59'
+            Sunday: '12:00 - 23:59'
+        priority: '2'

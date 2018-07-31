@@ -1,5 +1,4 @@
 const assert = require('assert');
-const axios = require('axios');
 
 describe('Check if the script handles failure logic properly', () => {
     function Node(node) {

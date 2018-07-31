@@ -1,4 +1,5 @@
 node_modules
 package-lock.json
 .tern-project
-config.yaml.mine
+config.yaml
+.DS_Store

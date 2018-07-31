@@ -4,7 +4,10 @@
   "description": "Application to monitor the status of a remote factomd instance, with built in phonecall alert in the event of factomd failure.",
   "main": "monitor.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test-watch": "nodemon --exec 'npm test'",
+    "test-watch-debugger": "nodemon --exec 'npm run test-debugger'",
+    "test": "mocha ./test/*.test.js",
+    "test-debugger": "mocha --inspect-brk ./test/*.test.js"
   },
   "repository": {
     "type": "git",
@@ -25,6 +28,7 @@
   "homepage": "https://github.com/Factoshi/Node-Monitor#readme",
   "dependencies": {
     "axios": "^0.18.0",
+    "moment": "^2.22.2",
     "twilio": "^3.17.6",
     "yaml-js": "^0.2.3"
   },
