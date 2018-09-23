@@ -54,13 +54,15 @@ class Node {
     }
 
     alertPersonOnDuty() {
-        let personOnDuty = this.getPersonOnDuty();
+        const { name, phoneNumber } = this.getPersonOnDuty();
+
+        console.log(`Alerting ${name} at ${phoneNumber}`);
 
         if (this.voice === true) {
             client.api.calls
                 .create({
                     url: config.twilio.voiceUrl,
-                    to: personOnDuty.phoneNumber,
+                    to: phoneNumber,
                     from: config.twilio.from
                 })
                 .done();
@@ -70,7 +72,7 @@ class Node {
             client.messages
                 .create({
                     body: `${this.name} is ${this.status}.`,
-                    to: personOnDuty.phoneNumber,
+                    to: phoneNumber,
                     from: config.twilio.from
                 })
                 .done();
