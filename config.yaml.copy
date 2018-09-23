@@ -8,11 +8,11 @@ twilio:
     authToken: 'authToken goes in these ones'
     from: 'from number here'
     voiceUrl: 'your voice URL here'
-    alertOffDutyByText: true
+                            alertOffDutyByText: true
 
-# alertOffDutyByText will send everyone not on duty a text if something happens.
-# It will not call an off duty person, even if voice is set to true for the node in question.
-# In all instances, the person will be informed whether or not they are on duty.
+                        # alertOffDutyByText will send everyone not on duty a text if something happens.
+                        # It will not call an off duty person, even if voice is set to true for the node in question.
+                        # In all instances, the person will be informed whether or not they are on duty.
 
 nodes:
     -   ip: 'ip address of the node you are monitoring inside these quotes'

@@ -20,17 +20,18 @@ class Node {
         this.lastBlockTime = 0;
     }
 
-    async monitor() {
+    // prettier-ignore
+    async evaluateNodeState() {
         const nodeHeight = await this.checkHeight();
 
         if (!nodeHeight && this.status === 'online') {
             this.status = 'offline';
             console.log('\x1b[31m', `${this.name}:`, '\x1b[0m', `node is offline - ${this.height}`);
-            this.alertUser();
+            this.alertPersonOnDuty();
         } else if (Date.now() - this.lastBlockTime > 1200000 && this.status === 'online') {
             this.status = 'stalled';
             console.log('\x1b[31m', `${this.name}:`, '\x1b[0m', `node has stalled - ${this.height}`);
-            this.alertUser();
+            this.alertPersonOnDuty();
         } else if (nodeHeight > this.height || (nodeHeight && this.status === 'offline')) {
             this.height = nodeHeight;
             this.lastBlockTime = Date.now();
@@ -39,23 +40,23 @@ class Node {
         }
     }
 
+    // prettier-ignore
     async checkHeight() {
         for (let i = 0; i < 10; i++) {
             try {
                 const controlPanelHeight = await axios.get(`http://${this.ip}:${this.port}/factomdBatch?batch=myHeight`);
                 return controlPanelHeight.data[0].Height;
             } catch(err) {
-                await wait(3000);
+                await new Promise(resolve => setTimeout(resolve, 3000));
             }
         }
         return null;
     }
 
-    alertUser() {
+    alertPersonOnDuty() {
         let personOnDuty = this.getPersonOnDuty();
 
-        if (this.voice === true && Date.now() - Node.lastAlert > 300000) {
-            Node.lastAlert = Date.now();
+        if (this.voice === true) {
             client.api.calls
                 .create({
                     url: config.twilio.voiceUrl,
@@ -66,40 +67,23 @@ class Node {
         }
 
         if (this.text === true) {
-            this.textUser(
-                personOnDuty,
-                `${this.name} is ${this.status}. You are on duty.`
-            );
-        }
-
-        if (config.twilio.alertOffDutyByText === true) {
-            config.rota.forEach(person => {
-                if (person.name !== personOnDuty.name) {
-                    this.textUser(
-                        person,
-                        `${this.name} is ${this.status}. You are off duty.`
-                    );
-                }
-            });
+            client.messages
+                .create({
+                    body: `${this.name} is ${this.status}.`,
+                    to: personOnDuty.phoneNumber,
+                    from: config.twilio.from
+                })
+                .done();
         }
     }
 
-    textUser(user, msg) {
-        client.messages
-            .create({
-                body: msg,
-                to: user.phoneNumber,
-                from: config.twilio.from,
-            })
-            .done();
-    }
-
+    // prettier-ignore
     getPersonOnDuty() {
         const peopleOnDuty = [];
         const today = moment().format('dddd');
         const time = moment().format('HH:mm');
         config.rota.forEach(person => {
-            const onDutyToday = person.onDuty[`${today}`];
+            const onDutyToday = person.onDuty[today];
             if (onDutyToday) {
                 const startTime = moment(onDutyToday.split(' - ')[0], 'HH:mm').format('HH:mm');
                 const endTime = moment(onDutyToday.split(' - ')[1], 'HH:mm').format('HH:mm');
@@ -110,35 +94,29 @@ class Node {
         });
 
         if (peopleOnDuty.length > 0) {
-            return this.determinePriority(peopleOnDuty);
+            return this.determineAlertPriority(peopleOnDuty);
         } else {
-            return this.determinePriority(config.rota);
+            return this.determineAlertPriority(config.rota);
         }
     }
 
-    determinePriority(contactArray) {
-        return contactArray.reduce((highestPriority, currentPerson) => {
-            if (currentPerson.priority > highestPriority.priority) {
-                return highestPriority = currentPerson;
+    determineAlertPriority(contactArray) {
+        return contactArray.reduce((highestPerson, currentPerson) => {
+            if (currentPerson.priority > highestPerson.priority) {
+                return currentPerson;
             }
-            return highestPriority;
+            return highestPerson;
         });
     }
 }
 
-function wait(x) {
-    return new Promise((resolve) => {
-        setTimeout(() => resolve(), x);
-    });
-}
-
 async function startMonitoring() {
-    config.nodes.forEach(async (nodeObject) => {
+    config.nodes.forEach(async nodeObject => {
         const node = new Node(nodeObject);
 
         while (node) {
-            await node.monitor();
-            await wait(30000);
+            await node.evaluateNodeState();
+            await new Promise(resolve => setTimeout(resolve, 30000));
         }
     });
 }
