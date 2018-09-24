@@ -1,3 +1,9 @@
+changelog v0.4.0
+
+- New: introduce rota system
+- Update: change name to factom-monitord
+- Bug fix: give user feedback and trigger alert if fail to make initial connection
+
 changelog v0.3.0
 
 - Complete rewrite

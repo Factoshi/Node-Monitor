@@ -1,0 +1,62 @@
+# CONFIGURATION FILE
+# Delete or comment out unneeded nodes. Add more nodes by duplicating fields
+# voiceUrl only mandatory when some node has voice set to true
+# All other fields are mandatory
+
+twilio:
+    SID: 'bf04c1ad33448253c9de33a9c98ec01c' # Your Twilio SID
+    authToken: '762a58ef42cf6cebf31106c780d4188e' # Your Twilio authToken
+    from: '441234567890' # Your Twilio "from" number
+    voiceUrl: 'https://demo.twilio.com/welcome/voice/' # Your Twilio voice URL
+
+nodes:
+    - ip: '127.0.0.1' # your node IP
+      port: '8090' # control panel port
+      name: 'a human friendly name - can be anything'
+      voice: true
+      text: true
+
+    - ip: 'same drill as above but a second node'
+      port: 'If you do not have a second node'
+      name: 'delete all this'
+      voice: 'if you have more than 2'
+      text: 'copy and paste as many instances as you need'
+
+# For the rota below, factom-monitord will alert whoever is on call.
+# If there is a gap in the rota where no one is currently on call
+# or if there are two people who are on call at the same time,
+# factom-monitord will alert the person with the highest priority
+# (a higher number is a higher priority).
+# Timezone is the same as that on the local machine.
+# Shifts are in the following format: "day of week: ['start time', 'end time']"
+
+rota:
+    - name: 'Bill'
+      phoneNumber: '447864874876'
+      onDuty:
+          Monday: ['00:00', '07:59']
+          Tuesday: ['00:00', '07:59']
+          Wednesday: ['00:00', '07:59']
+          Thursday: ['00:00', '07:59']
+          Friday: ['00:00', '07:59']
+      priority: '3'
+
+    - name: 'Bob'
+      phoneNumber: '444354365437'
+      onDuty:
+          Monday: ['08:00', '15:59']
+          Tuesday: ['08:00', '15:59']
+          Wednesday: ['08:00', '15:59']
+          Thursday: ['08:00', '15:59']
+          Friday: ['08:00', '15:59']
+      priority: '2'
+
+    - name: 'Ben'
+      phoneNumber: '44786876965'
+      onDuty:
+          Monday: ['16:00', '23:59']
+          Tuesday: ['16:00', '23:59']
+          Wednesday: ['16:00', '23:59']
+          Thursday: ['16:00', '23:59']
+          Friday: ['16:00', '23:59']
+      priority: '5'

@@ -1,6 +1,10 @@
 # Factom Node Monitoring and Alert Tool
 
-This scirpt monitors the state of your local or remote Factomd node. In the event that Factomd hangs or the blockchain stalls, the script uses Twilio to make a telephone call directly to a number of your choice. Note, you must have a Twilio account to use this script.
+Factom-monitord is a tool to monitor the health of one or more factomd nodes. It will alert the user via a text message or phone call in the event that a node crashes or stalls.
+
+Factom-monitord allows users to implement a personnel rota; only the person on call at the time of a crash or stall event will be notified. Moreover, the rota allows users to set a priority rating for each person in the rota, which factom-monitord uses to select a person to alert when there is a gap in the rota.
+
+Users must have an account with [Twilio](https://www.twilio.com/) to operate this script.
 
 ## Installing NodeJS
 
@@ -15,7 +19,7 @@ sudo apt-get install -y nodejs
 
 ### MacOS
 
-Visit the NodeJS website to download in the installer package: https://nodejs.org/en/#download
+Visit the NodeJS website to download the installer package: https://nodejs.org/en/#download
 
 Alternatively, if you have Homebrew installed:
 
@@ -38,6 +42,7 @@ PM2 is a process manager built for NodeJS. It is a convenient and easy way to ma
 ```
 npm install pm2 -g
 ```
+
 (Note: You need to run the above command with root permissions)
 
 ## Running
@@ -46,15 +51,14 @@ First, copy config.yaml.copy to config.yaml.
 
 Then, fill out all of the details in config.yaml. It is important that you read the comments in the config file carefully otherwise the script may not work as expected.
 
-Second, make sure the firewall for the control panel port is open on each target host.
-
+Second, make sure the firewall for the control panel port is open to factom-monitord's public IP on each target host.
 
 ### Without PM2
 
 To run the script without PM2, make sure you're in the project's root directory then run:
 
 ```
-node monitor.js
+node factom-monitord.js
 ```
 
 ### With PM2
@@ -62,7 +66,7 @@ node monitor.js
 With PM2, make sure you are in the project's root directory then run:
 
 ```
-pm2 start monitor.js
+pm2 start factom-monitord.js
 ```
 
 Next, save the current process list:
@@ -81,11 +85,11 @@ then follow the onscreen instructions.
 
 ## Built With
 
-* [Twilio](https://www.twilio.com/)
+-   [Twilio](https://www.twilio.com/)
 
 ## Authors
 
-* **Alex Carrithers**
+-   **Alex Carrithers**
 
 ## License
 
