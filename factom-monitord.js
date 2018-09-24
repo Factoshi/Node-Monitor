@@ -24,24 +24,24 @@ class Node {
     async evaluateNodeState() {
         const nodeHeight = await this.checkHeight();
         
+        // success case
         if (nodeHeight > this.height || (nodeHeight && this.status === 'offline')) {
-            // success case
             this.height = nodeHeight;
             this.lastBlockTime = Date.now();
             this.status = 'online';
             console.log('\x1b[32m', `${this.name}:`, '\x1b[0m', `blockheight - ${this.height}`);
+        // crash case
         } else if (!nodeHeight && this.status === 'online') {
-            // crash case
             this.status = 'offline';
             console.log('\x1b[31m', `${this.name}:`, '\x1b[0m', `node is offline - ${this.height}`);
             this.alertPersonOnDuty();
+        // stall case
         } else if (Date.now() - this.lastBlockTime > 1200000 && this.status === 'online') {
-            // stall case
             this.status = 'stalled';
             console.log('\x1b[31m', `${this.name}:`, '\x1b[0m', `node has stalled - ${this.height}`);
             this.alertPersonOnDuty();
+        // initial contact failure case
         } else if (!nodeHeight && this.height === 0 && this.status !== 'offline') {
-            // initial contact failure case
             this.status = 'offline';
             console.log('\x1b[31m', `${this.name}:`, '\x1b[0m', `cannot make initial contact. Are you sure factomd is running and the port is open?`);
             this.alertPersonOnDuty();
@@ -50,7 +50,7 @@ class Node {
 
     // prettier-ignore
     async checkHeight() {
-        for (let i = 0; i < 5; i++) {
+        for (let i = 0; i < 10; i++) {
             try {
                 // had to add timeout, otherwise a failed node could take an absurdly long time to trigger an alert
                 const controlPanelHeight = await axios.get(`http://${this.ip}:${this.port}/factomdBatch?batch=myHeight`, {
