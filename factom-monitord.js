@@ -23,31 +23,43 @@ class Node {
     // prettier-ignore
     async evaluateNodeState() {
         const nodeHeight = await this.checkHeight();
-
-        if (!nodeHeight && this.status === 'online') {
-            this.status = 'offline';
-            console.log('\x1b[31m', `${this.name}:`, '\x1b[0m', `node is offline - ${this.height}`);
-            this.alertPersonOnDuty();
-        } else if (Date.now() - this.lastBlockTime > 1200000 && this.status === 'online') {
-            this.status = 'stalled';
-            console.log('\x1b[31m', `${this.name}:`, '\x1b[0m', `node has stalled - ${this.height}`);
-            this.alertPersonOnDuty();
-        } else if (nodeHeight > this.height || (nodeHeight && this.status === 'offline')) {
+        
+        if (nodeHeight > this.height || (nodeHeight && this.status === 'offline')) {
+            // success case
             this.height = nodeHeight;
             this.lastBlockTime = Date.now();
             this.status = 'online';
             console.log('\x1b[32m', `${this.name}:`, '\x1b[0m', `blockheight - ${this.height}`);
+        } else if (!nodeHeight && this.status === 'online') {
+            // crash case
+            this.status = 'offline';
+            console.log('\x1b[31m', `${this.name}:`, '\x1b[0m', `node is offline - ${this.height}`);
+            this.alertPersonOnDuty();
+        } else if (Date.now() - this.lastBlockTime > 1200000 && this.status === 'online') {
+            // stall case
+            this.status = 'stalled';
+            console.log('\x1b[31m', `${this.name}:`, '\x1b[0m', `node has stalled - ${this.height}`);
+            this.alertPersonOnDuty();
+        } else if (!nodeHeight && this.height === 0 && this.status !== 'offline') {
+            // initial contact failure case
+            this.status = 'offline';
+            console.log('\x1b[31m', `${this.name}:`, '\x1b[0m', `cannot make initial contact. Are you sure factomd is running and the port is open?`);
+            this.alertPersonOnDuty();
         }
     }
 
     // prettier-ignore
     async checkHeight() {
-        for (let i = 0; i < 10; i++) {
+        for (let i = 0; i < 5; i++) {
             try {
-                const controlPanelHeight = await axios.get(`http://${this.ip}:${this.port}/factomdBatch?batch=myHeight`);
+                // had to add timeout, otherwise a failed node could take an absurdly long time to trigger an alert
+                const controlPanelHeight = await axios.get(`http://${this.ip}:${this.port}/factomdBatch?batch=myHeight`, {
+                    timeout: 2500
+                });
                 return controlPanelHeight.data[0].Height;
             } catch(err) {
-                await new Promise(resolve => setTimeout(resolve, 3000));
+                // Math.pow() implements incremental back-off for node retries
+                await new Promise(resolve => setTimeout(resolve, Math.pow(3, i)));
             }
         }
         return null;
@@ -56,7 +68,7 @@ class Node {
     alertPersonOnDuty() {
         const { name, phoneNumber } = this.getPersonOnDuty();
 
-        console.log(`Alerting ${name} at ${phoneNumber}`);
+        console.log(`Alerting ${name} on ${phoneNumber}`);
 
         if (this.voice === true) {
             client.api.calls
@@ -82,14 +94,14 @@ class Node {
     // prettier-ignore
     getPersonOnDuty() {
         const peopleOnDuty = [];
+        const now = moment().format('HH:mm');
         const today = moment().format('dddd');
-        const time = moment().format('HH:mm');
         config.rota.forEach(person => {
-            const onDutyToday = person.onDuty[today];
-            if (onDutyToday) {
-                const startTime = moment(onDutyToday.split(' - ')[0], 'HH:mm').format('HH:mm');
-                const endTime = moment(onDutyToday.split(' - ')[1], 'HH:mm').format('HH:mm');
-                if (startTime <= time && endTime >= time) {
+            const personOnDutyToday = person.onDuty[today] || person.onDuty[today.toLowerCase()];
+            if (personOnDutyToday) {
+                const shiftStart = personOnDutyToday[0];
+                const shiftEnd = personOnDutyToday[1];
+                if (shiftStart <= now && shiftEnd >= now) {
                     peopleOnDuty.push(person);
                 }
             }
@@ -116,7 +128,7 @@ async function startMonitoring() {
     config.nodes.forEach(async nodeObject => {
         const node = new Node(nodeObject);
 
-        while (node) {
+        while (true) {
             await node.evaluateNodeState();
             await new Promise(resolve => setTimeout(resolve, 30000));
         }
