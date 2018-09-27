@@ -54,7 +54,7 @@ class Node {
             try {
                 // had to add timeout, otherwise a failed node could take an absurdly long time to trigger an alert
                 const controlPanelHeight = await axios.get(`http://${this.ip}:${this.port}/factomdBatch?batch=myHeight`, {
-                    timeout: 2500
+                    timeout: 3000
                 });
                 return controlPanelHeight.data[0].Height;
             } catch(err) {
